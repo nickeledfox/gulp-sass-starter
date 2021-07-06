@@ -4,7 +4,7 @@ const concat = require('gulp-concat');
 const browserSync = require('browser-sync').create();
 const uglify = require('gulp-uglify-es').default;
 const autoprefixer = require('gulp-autoprefixer');
-//---------------------------------------------------//
+//-------------------------------------------------//
 function browsersync() {
   browserSync.init({
     server: {
@@ -32,9 +32,23 @@ function styles() {
       })
     )
     .pipe(concat('style.min.css'))
-    .pipe(autoprefixer({ overrideBrowserslist: ['last 10 versions'] }))
+    .pipe(
+      autoprefixer({ overrideBrowserslist: ['last 10 versions'], grid: true })
+    )
     .pipe(dest('app/css'))
     .pipe(browserSync.stream());
+}
+
+function build() {
+  return src(
+    [
+      'app/css/style.min.css',
+      'app/fonts/**/*',
+      'app/js/main.min.js',
+      'app/*.html',
+    ],
+    { base: 'app' }
+  ).pipe(dest('dist'));
 }
 
 function watching() {
@@ -43,9 +57,11 @@ function watching() {
   watch(['app/*.html']).on('change', browserSync.reload);
 }
 
-//----------------------------------------------------//
+//-------------------------------------------------//
 exports.styles = styles;
 exports.scripts = scripts;
 exports.watching = watching;
+exports.build = build;
 exports.browsersync = browsersync;
+
 exports.default = parallel(scripts, browsersync, watching);
