@@ -5,21 +5,29 @@ const browserSync = require('browser-sync').create();
 const uglify = require('gulp-uglify-es').default;
 const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
+const fileInclude = require('gulp-file-include');
 const del = require('del');
 //-------------------------------------------------//
 function browsersync() {
   browserSync.init({
     server: {
-      baseDir: 'app/',
+      baseDir: './',
     },
     port: 3000,
     notify: false,
   });
 }
 
+function html() {
+  return src(['app' + '/*.html', '!' + 'app' + '/_*html'])
+    .pipe(fileInclude())
+    .pipe(dest('./')) //change on 'dist/html' if needed
+    .pipe(browserSync.stream());
+}
+
 function scripts() {
   return src([
-    'node_modules/jquery/dist/jquery.js', //some vendor here is 4ex j-querry| not a min because we'll minify it all together with my js files
+    // 'node_modules/jquery/dist/jquery.js', // some vendor here is 4ex j-querry| not a min because we'll minify it all together with my js files
     'app/js/main.js',
   ])
     .pipe(concat('main.min.js'))
@@ -68,7 +76,7 @@ function build() {
       'app/css/style.min.css',
       'app/fonts/**/*',
       'app/js/main.min.js',
-      'app/*.html',
+      // 'app/html*.html',
     ],
     { base: 'app' }
   ).pipe(dest('dist'));
@@ -77,7 +85,7 @@ function build() {
 function watching() {
   watch(['app/scss/**/*.scss'], styles);
   watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts); //only one 4now, but we can add more later like with scss
-  watch(['app/*.html']).on('change', browserSync.reload);
+  watch(['app/*.html'], html).on('change', browserSync.reload);
 }
 
 //-------------------------------------------------//
@@ -88,5 +96,5 @@ exports.images = images;
 exports.clean = clean;
 exports.browsersync = browsersync;
 
-exports.build = series(clean, images, build);
-exports.default = parallel(styles, scripts, browsersync, watching);
+exports.build = series(clean, images, html, build);
+exports.default = parallel(html, styles, scripts, browsersync, watching);
