@@ -1,15 +1,22 @@
 @use "node_modules/normalize.css/normalize.css";
-* {
-  box-sizing: border-box;
-}
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  overflow: hidden;
-  margin: 0;
-  background-color: #f4d03f;
-  background-image: linear-gradient(132deg, #f4d03f 0%, #16a085 100%);
-}
+
+//------------------HELPERS----------------//
+@use '1-helpers/variables';
+@use '1-helpers/functions';
+@use '1-helpers/mixins';
+
+//------------------VENDORS---------------//
+
+//-------------------BASE-----------------//
+@use '3-base/global';
+@use '3-base/common';
+@use '3-base/fonts';
+
+//------------------LAYOUT---------------//
+@use '4-layout/home';
+@use '4-layout/main';
+@use '4-layout/footer';
+
+//----------------COMPONENTS-------------//
+@use '5-components/navigation';
+@use '5-components/button';

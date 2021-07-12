@@ -30,6 +30,7 @@ function html() {
 function scripts() {
   return src([
     // 'node_modules/jquery/dist/jquery.js', // some vendor here is 4ex j-querry| not a min because we'll minify it all together with my js files
+    'app/js/hamburger.js',
     'app/js/main.js',
   ])
     .pipe(concat('main.min.js'))
