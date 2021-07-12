@@ -6,6 +6,7 @@ const uglify = require('gulp-uglify-es').default;
 const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const fileInclude = require('gulp-file-include');
+const htmlmin = require('gulp-htmlmin');
 const del = require('del');
 //-------------------------------------------------//
 function browsersync() {
@@ -21,6 +22,7 @@ function browsersync() {
 function html() {
   return src(['app' + '/*.html', '!' + 'app' + '/_*html'])
     .pipe(fileInclude())
+    .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(dest('./')) //change on 'dist/html' if needed
     .pipe(browserSync.stream());
 }
@@ -37,10 +39,11 @@ function scripts() {
 }
 
 function styles() {
-  return src('app/scss/style.scss')
+  return src('app/scss/main.scss')
     .pipe(
       scss({
         outputStyle: 'compressed',
+        includePath: ['./node_modules'],
       })
     )
     .pipe(concat('style.min.css'))
@@ -52,7 +55,7 @@ function styles() {
 }
 
 function images() {
-  return src('app/images/**/*')
+  return src('app/assets/images/**/*')
     .pipe(
       imagemin([
         imagemin.gifsicle({ interlaced: true }),
@@ -63,7 +66,7 @@ function images() {
         }),
       ])
     )
-    .pipe(dest('dist/images'));
+    .pipe(dest('dist/assets/images'));
 }
 
 function clean() {
