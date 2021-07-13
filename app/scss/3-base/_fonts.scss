@@ -2,9 +2,8 @@
 
 @font-face {
   font-family: variables.$font-family-primary;
-  src: local("mathlete"),
-    url("/app/assets/fonts/Gilroy-Regular.woff2") format(".woff2"),
-    url("/app/assets/fonts/Gilroy-Regular.woff") format(".woff");
+  src: local("mathlete"), url("/app/assets/fonts/-.woff2") format(".woff2"),
+    url("/app/assets/fonts/-.woff") format(".woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;

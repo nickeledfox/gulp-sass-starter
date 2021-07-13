@@ -9,12 +9,10 @@
 //   @include font-size(14px)
 // }
 //----------------------------------------//
-
 @mixin box($width, $height: $width) {
   width: $width;
   height: $height;
 }
-
 /* ===== Usage ===== */
 div {
   // You can pass width && height
