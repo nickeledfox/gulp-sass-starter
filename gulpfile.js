@@ -7,6 +7,9 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const fileInclude = require('gulp-file-include');
 const htmlmin = require('gulp-htmlmin');
+const ttf2woff = require('gulp-ttf2woff');
+const ttf2woff2 = require('gulp-ttf2woff2');
+const fonter = require('gulp-fonter');
 const del = require('del');
 //-------------------------------------------------//
 function browsersync() {
@@ -70,6 +73,19 @@ function images() {
     .pipe(dest('dist/assets/images'));
 }
 
+function fonts() {
+  src('app/assets/fonts/**/*').pipe(ttf2woff()).pipe(dest('dist/assets/fonts'));
+  return src('app/assets/fonts/**/*')
+    .pipe(ttf2woff2())
+    .pipe(dest('app/assets/fonts'));
+}
+
+// gulp.task("otf2ttf", function () {
+//   return src(["app/assets" + "/fonts/*.otf"])
+//     .pipe(fonter({ formats: ["ttf"] }))
+//     .pipe(dest("app/assets/fonts"));
+// });
+
 function clean() {
   return del('dist');
 }
@@ -78,8 +94,9 @@ function build() {
   return src(
     [
       'app/css/style.min.css',
-      'app/fonts/**/*',
+      'app/assets/fonts*.woff, *.woff2',
       'app/js/main.min.js',
+
       // 'app/html*.html',
     ],
     { base: 'app' }
@@ -93,6 +110,7 @@ function watching() {
 }
 
 //-------------------------------------------------//
+exports.fonts = fonts;
 exports.styles = styles;
 exports.scripts = scripts;
 exports.watching = watching;
@@ -100,5 +118,5 @@ exports.images = images;
 exports.clean = clean;
 exports.browsersync = browsersync;
 
-exports.build = series(clean, images, html, build);
+exports.build = series(clean, images, html, build, fonts);
 exports.default = parallel(html, styles, scripts, browsersync, watching);

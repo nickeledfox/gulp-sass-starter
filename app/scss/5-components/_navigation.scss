@@ -1,3 +1,5 @@
+@use '1-helpers/colors';
+@use '1-helpers/mixins' as *;
 .header {
   border-bottom: 1px solid #e2e8f0;
 }
@@ -13,22 +15,21 @@
     align-items: center;
   }
 
-  &__item {
+  &__item + &__item {
     margin-left: 5rem;
   }
 
   &__link {
-    font-size: 1.6rem;
+    @include font-size(16px);
     font-weight: 400;
     color: #475569;
     &:hover {
-      color: #482ff7;
+      color: rgb(205, 63, 134);
     }
   }
 
   &__logo {
-    font-size: 2.1rem;
-    font-weight: 500;
+    width: 7rem;
   }
 }
 
@@ -68,6 +69,13 @@
 
   .nav__item {
     margin: 2.5rem 0;
+  }
+  .nav__item + .nav__item {
+    margin-left: 0;
+  }
+
+  .nav__link {
+    font-size: 2rem;
   }
 
   .hamburger {

@@ -1,4 +1,5 @@
-@use '1-helpers/variables';
+@use '1-helpers/variables' as var;
+@use '1-helpers/colors';
 
 * {
   padding: 0;
@@ -34,9 +35,9 @@ aside {
   display: block;
 }
 
-html:focus-within {
-  scroll-behavior: smooth;
-}
+// html:focus-within {
+//   scroll-behavior: smooth;
+// }
 
 html,
 body {
@@ -48,9 +49,11 @@ body {
 }
 
 body {
-  line-height: 1.5;
-  font-size: 1rem;
-  font-family: variables.$font-family-primary;
+  line-height: var.$line-height;
+  font-size: var.$font-size-main;
+  font-family: var.$font-family-primary;
+  color: colors.$font-color-main;
+
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
 }

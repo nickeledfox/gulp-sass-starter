@@ -1,22 +1,23 @@
-@use "node_modules/normalize.css/normalize.css";
+@forward "node_modules/normalize.css/normalize.css";
 
 //------------------HELPERS----------------//
-@use '1-helpers/variables';
-@use '1-helpers/functions';
-@use '1-helpers/mixins';
+// @forward '1-helpers/variables';
+// @forward '1-helpers/functions';
+// @forward '1-helpers/mixins';
+// @forward '1-helpers/colors';
 
 //------------------VENDORS---------------//
 
 //-------------------BASE-----------------//
-@use '3-base/global';
-@use '3-base/common';
-@use '3-base/fonts';
+@forward '3-base/global';
+@forward '3-base/common';
+@forward '3-base/fonts';
 
 //------------------LAYOUT---------------//
-@use '4-layout/home';
-@use '4-layout/main';
-@use '4-layout/footer';
+@forward '4-layout/home';
+@forward '4-layout/main';
+@forward '4-layout/footer';
 
 //----------------COMPONENTS-------------//
-@use '5-components/navigation';
-@use '5-components/button';
+@forward '5-components/navigation';
+@forward '5-components/button';
