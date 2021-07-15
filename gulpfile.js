@@ -15,7 +15,7 @@ const del = require('del');
 function browsersync() {
   browserSync.init({
     server: {
-      baseDir: './',
+      baseDir: 'dist/',
     },
     port: 3000,
     notify: false,
@@ -26,7 +26,7 @@ function html() {
   return src(['app' + '/*.html', '!' + 'app' + '/_*html'])
     .pipe(fileInclude())
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(dest('./')) //change on 'dist/html' if needed
+    .pipe(dest('dist')) //change on 'dist/html' if needed
     .pipe(browserSync.stream());
 }
 
