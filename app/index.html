@@ -10,9 +10,12 @@
 
     <link rel="stylesheet" href="/css/style.min.css" />
   </head>
-  @@include('_navigation.html')
-  <body>
-    <script src="/js/main.min.js"></script>
-  </body>
-  @@include('_footer.html')
+  <div class="wrapper">
+    <body>
+      @@include('_header.html')
+
+      <script src="./app/js/main.min.js"></script>
+      @@include('_footer.html')
+    </body>
+  </div>
 </html>
