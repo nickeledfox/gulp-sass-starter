@@ -9,9 +9,8 @@ const fileInclude = require('gulp-file-include');
 const htmlmin = require('gulp-htmlmin');
 const ttf2woff = require('gulp-ttf2woff');
 const ttf2woff2 = require('gulp-ttf2woff2');
-const fonter = require('gulp-fonter');
 const del = require('del');
-//-------------------------------------------------//
+
 function browsersync() {
   browserSync.init({
     server: {
@@ -26,16 +25,12 @@ function html() {
   return src(['app' + '/*.html', '!' + 'app' + '/_*html'])
     .pipe(fileInclude())
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(dest('dist')) //change on 'dist/html' if needed
+    .pipe(dest('dist'))
     .pipe(browserSync.stream());
 }
 
 function scripts() {
-  return src([
-    // 'node_modules/jquery/dist/jquery.js', // some vendor here is 4ex j-querry| not a min because we'll minify it all together with my js files
-    'app/js/hamburger.js',
-    'app/js/main.js',
-  ])
+  return src(['app/js/main.js', 'src/app/js/**/*.js', '!src/js/script.min.js'])
     .pipe(concat('main.min.js'))
     .pipe(uglify())
     .pipe(dest('app/js'))
@@ -105,11 +100,10 @@ function build() {
 
 function watching() {
   watch(['app/scss/**/*.scss'], styles);
-  watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts); //only one 4now, but we can add more later like with scss
+  watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
   watch(['app/*.html'], html).on('change', browserSync.reload);
 }
 
-//-------------------------------------------------//
 exports.fonts = fonts;
 exports.styles = styles;
 exports.scripts = scripts;
