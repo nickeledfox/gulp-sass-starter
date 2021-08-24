@@ -10,6 +10,7 @@ const htmlmin = require('gulp-htmlmin');
 const ttf2woff = require('gulp-ttf2woff');
 const ttf2woff2 = require('gulp-ttf2woff2');
 const del = require('del');
+// const pug = require("gulp-pug");
 
 function browsersync() {
   browserSync.init({
@@ -28,6 +29,18 @@ function html() {
     .pipe(dest('dist'))
     .pipe(browserSync.stream());
 }
+
+// const pughtml = () => {
+//   return src('app/pug/pages/**/*.pug')
+//     .pipe(
+//       pug({
+//         pretty: true,
+//       })
+//     )
+//     .pipe(htmlmin({ collapseWhitespace: true }))
+//     .pipe(dest("dist"))
+//     .pipe(sync.stream());
+// };
 
 function scripts() {
   return src(['app/js/main.js', 'src/app/js/**/*.js', '!src/js/script.min.js'])
@@ -91,8 +104,8 @@ function build() {
       'app/css/style.min.css',
       'app/assets/fonts*.woff, *.woff2',
       'app/js/main.min.js',
-
-      // 'app/html*.html',
+      'app/html*.html',
+      // 'app/pug/pages/**/*.pug',
     ],
     { base: 'app' }
   ).pipe(dest('dist'));
@@ -102,6 +115,7 @@ function watching() {
   watch(['app/scss/**/*.scss'], styles);
   watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
   watch(['app/*.html'], html).on('change', browserSync.reload);
+  // watch(['app/pug/**/*.pug'], pughtml).on('change', browserSync.reload);
 }
 
 exports.fonts = fonts;
@@ -111,6 +125,7 @@ exports.watching = watching;
 exports.images = images;
 exports.clean = clean;
 exports.browsersync = browsersync;
+// exports.pughtml = pughtml;
 
-exports.build = series(clean, images, html, build, fonts);
+exports.build = series(clean, images, html, build, fonts); // or pughtml instead of html
 exports.default = parallel(html, styles, scripts, browsersync, watching);
