@@ -1,18 +1,24 @@
 const { src, dest, watch, parallel, series } = require('gulp');
 const scss = require('gulp-sass')(require('sass'));
-const concat = require('gulp-concat');
 const browserSync = require('browser-sync').create();
-const uglify = require('gulp-uglify-es').default;
 const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const fileInclude = require('gulp-file-include');
 const htmlmin = require('gulp-htmlmin');
 const ttf2woff = require('gulp-ttf2woff');
 const ttf2woff2 = require('gulp-ttf2woff2');
+const webpackStream = require('webpack-stream');
 const del = require('del');
+const uglify = require('gulp-uglify-es').default;
+const concat = require('gulp-concat');
+const babel = require('gulp-babel');
+
+// *****************************************************
+//                    use as needed
+// *****************************************************
 // const pug = require("gulp-pug");
 
-function browsersync() {
+const browsersync = () => {
   browserSync.init({
     server: {
       baseDir: 'dist/',
@@ -20,16 +26,19 @@ function browsersync() {
     port: 3000,
     notify: false,
   });
-}
+};
 
-function html() {
+const html = () => {
   return src(['app' + '/*.html', '!' + 'app' + '/_*html'])
     .pipe(fileInclude())
     .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(dest('dist'))
     .pipe(browserSync.stream());
-}
+};
 
+// ********************************************************
+//               use instead of html function
+// ********************************************************
 // const pughtml = () => {
 //   return src('app/pug/pages/**/*.pug')
 //     .pipe(
@@ -42,15 +51,43 @@ function html() {
 //     .pipe(sync.stream());
 // };
 
-function scripts() {
-  return src(['app/js/main.js', 'src/app/js/**/*.js', '!src/js/script.min.js'])
-    .pipe(concat('main.min.js'))
-    .pipe(uglify())
-    .pipe(dest('app/js'))
-    .pipe(browserSync.stream());
-}
+// **************************************************
+//  use instead of webpack version which is bellow
+// **************************************************
+// const scripts = () => {
+//   return src(['app/js/main.js', 'app/js/**/*.js', '!app/js/script.min.js'])
+//     .pipe(concat('main.min.js'))
+//     .pipe(
+//       babel({
+//         presets: ['@babel/preset-env'],
+//       })
+//     )
+//     .pipe(uglify())
+//     .pipe(dest('dist/js'))
+//     .pipe(browserSync.stream());
+// }
 
-function styles() {
+const scripts = () => {
+  return src('app/js/index.js')
+    .pipe(
+      webpackStream({
+        // mode: '', // set if don't use babel
+        output: {
+          filename: 'main.min.js',
+        },
+      })
+    )
+    .pipe(
+      babel({
+        presets: ['@babel/preset-env'],
+      })
+    )
+    .pipe(uglify())
+    .pipe(dest('dist/js'))
+    .pipe(browserSync.stream());
+};
+
+const styles = () => {
   return src('app/scss/main.scss')
     .pipe(
       scss({
@@ -62,11 +99,11 @@ function styles() {
     .pipe(
       autoprefixer({ overrideBrowserslist: ['last 10 versions'], grid: true })
     )
-    .pipe(dest('app/css'))
+    .pipe(dest('dist/css'))
     .pipe(browserSync.stream());
-}
+};
 
-function images() {
+const images = () => {
   return src('app/assets/images/**/*')
     .pipe(
       imagemin([
@@ -79,26 +116,29 @@ function images() {
       ])
     )
     .pipe(dest('dist/assets/images'));
-}
+};
 
-function fonts() {
+const fonts = () => {
   src('app/assets/fonts/**/*').pipe(ttf2woff()).pipe(dest('dist/assets/fonts'));
   return src('app/assets/fonts/**/*')
     .pipe(ttf2woff2())
     .pipe(dest('app/assets/fonts'));
-}
+};
 
+// *************************************************
+//     almost never need use as a task
+// *************************************************
 // gulp.task("otf2ttf", function () {
 //   return src(["app/assets" + "/fonts/*.otf"])
 //     .pipe(fonter({ formats: ["ttf"] }))
-//     .pipe(dest("app/assets/fonts"));
+//     .pipe(dest("dist/assets/fonts"));
 // });
 
-function clean() {
+const clean = () => {
   return del('dist');
-}
+};
 
-function build() {
+const build = () => {
   return src(
     [
       'app/css/style.min.css',
@@ -109,14 +149,14 @@ function build() {
     ],
     { base: 'app' }
   ).pipe(dest('dist'));
-}
+};
 
-function watching() {
+const watching = () => {
   watch(['app/scss/**/*.scss'], styles);
   watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
   watch(['app/*.html'], html).on('change', browserSync.reload);
   // watch(['app/pug/**/*.pug'], pughtml).on('change', browserSync.reload);
-}
+};
 
 exports.fonts = fonts;
 exports.styles = styles;

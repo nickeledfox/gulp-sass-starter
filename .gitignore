@@ -6,12 +6,13 @@ _arc
 bower_components
 node_modules
 .vscode
+.idea
 .publish
 .DS_Store
+*DS_Store
 *.log
 *.sublime-*
 *.rar
 *.zip
-.idea
 ex_files
 Thumbs.db

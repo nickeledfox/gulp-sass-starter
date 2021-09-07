@@ -9,4 +9,6 @@ function mobileMenu() {
 }
 const navLink = document.querySelectorAll('.nav__link');
 
-navLink.forEach((n) => n.addEventListener('click', closeMenu));
+// navLink.forEach((n) => n.addEventListener('click', closeMenu));
+
+export default hamburger;
