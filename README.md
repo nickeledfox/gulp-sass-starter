@@ -1,4 +1,4 @@
-## About The Project
+## About
 
 Gulp/Sass based website starter boilerplate. Helps organize and automate routine.
 
