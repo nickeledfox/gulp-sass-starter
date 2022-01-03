@@ -48,7 +48,7 @@ const html = () => {
 //     )
 //     .pipe(htmlmin({ collapseWhitespace: true }))
 //     .pipe(dest("dist"))
-//     .pipe(sync.stream());
+//     .pipe(browserSync.stream());
 // };
 
 // **************************************************
